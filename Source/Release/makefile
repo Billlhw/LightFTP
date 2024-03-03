@@ -19,6 +19,8 @@ endif
 
 -include ../makefile.defs
 
+CFLAGS += -fprofile-arcs -ftest-coverage
+
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
@@ -28,13 +30,13 @@ all: fftp
 fftp: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	$(CC) $(CFLAGS) -pthread -o "fftp" $(OBJS) $(USER_OBJS) $(LIBS)
+	$(CC) $(CFLAGS) -pthread -o "fftp" $(OBJS) $(USER_OBJS) $(LIBS) -lgcov
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) fftp
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) fftp *.gcno *.gcda
 	-@echo ' '
 
 .PHONY: all clean dependents

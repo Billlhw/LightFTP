@@ -11,6 +11,7 @@
 #include "ftpserv.h"
 #include "cfgparse.h"
 #include "x_malloc.h"
+#include <signal.h> 
 
 FTP_CONFIG   g_cfg;
 int          g_log = -1;
@@ -26,6 +27,12 @@ gnutls_datum_t                      session_keys_storage = {0};
 void ftp_tls_init();
 void ftp_tls_cleanup();
 
+void sigint_handler(int sig) {
+    printf("exit command received");
+	exit(0);
+}
+
+
 /* Program entry point */
 int main(int argc, char *argv[])
 {
@@ -35,6 +42,9 @@ int main(int argc, char *argv[])
 	pthread_t	thid;
 
 	struct in_addr na;
+
+	signal(SIGINT, sigint_handler);
+	signal(SIGTERM, sigint_handler);
 
 	if (sizeof (off_t) != 8)
 	{
